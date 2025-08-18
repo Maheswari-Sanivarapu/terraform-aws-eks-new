@@ -12,22 +12,24 @@ pipeline{
         stage('init'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
-                    sh """
-                        cd 00-VPC
-                        terraform init -reconfigure
-                    """
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                        sh """
+                            cd 00-VPC
+                            terraform init -reconfigure
+                        """
+                    }
                 }
             }
         }
         stage('plan'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
-                    sh """
-                        cd 00-VPC
-                        terraform plan
-                    """
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                        sh """
+                            cd 00-VPC
+                            terraform plan
+                        """
+                    }
                 }
             }
         }
@@ -39,11 +41,12 @@ pipeline{
             }
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
-                    sh """
-                        cd 00-VPC
-                        terraform apply -auto-approve
-                    """
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                        sh """
+                            cd 00-VPC
+                            terraform apply -auto-approve
+                        """
+                    }
                 }
             }
         }

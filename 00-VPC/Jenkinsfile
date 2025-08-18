@@ -1,0 +1,63 @@
+pipeline{
+    agent {
+        label 'AGENT-1'
+    }
+    environment{
+        appVersion = ''
+        REGION = "us-east-1"
+        ACC_ID = "557690617909"
+        PROJECT = "roboshop"
+    }
+    stages{
+        stage('init'){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    sh """
+                        cd 00-VPC
+                        terraform init -reconfigure
+                    """
+                }
+            }
+        }
+        stage('plan'){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    sh """
+                        cd 00-VPC
+                        terraform plan
+                    """
+                }
+            }
+        }
+        stage('apply'){
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "mahi"
+            }
+            steps{
+                script{
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    sh """
+                        cd 00-VPC
+                        terraform apply -auto-approve
+                    """
+                }
+            }
+        }
+    }
+    post{
+        always {
+            echo 'I will always say Hello again!'
+            deleteDir()
+        }
+        success {
+            echo 'Hello Success'
+        }
+        failure { 
+            echo 'Hello Failure'
+        }
+    }
+}

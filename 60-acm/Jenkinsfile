@@ -17,33 +17,36 @@ pipeline {
         stage('init'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                         sh """
                             cd 60-acm
                             terraform init -reconfigure
                         """
+                    }
                 }
             }
         }
         stage('plan'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                         sh """
                             cd 60-acm
                             terraform plan
                         """
+                    }
                 }
             }
         }
         stage('apply'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                         sh """
                             cd 60-acm
                             terraform apply -auto-approve
                         """
+                    }
                 }
             }
         }

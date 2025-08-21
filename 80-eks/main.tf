@@ -59,13 +59,13 @@ module "eks" {
         AmazonEFS = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
         AmazonEKSLoad = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
       }
-      taints = {
+      /* taints = {
         upgrade = {
             key = "Upgrade"
             value = "true"
             effect = "NO_SCHEDULE"
         }
-      }
+      } */
     }
   }
 

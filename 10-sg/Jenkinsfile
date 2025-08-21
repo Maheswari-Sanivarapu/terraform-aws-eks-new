@@ -47,7 +47,7 @@ pipeline {
                 }
             }
         }
-        /* stage('Bastion ACM EKS') {
+        stage('Bastion ACM EKS') {
             parallel {
                 stage('Trigger Bastion'){
                     steps{
@@ -77,7 +77,16 @@ pipeline {
                     }
                 }
             }
-        } */
+        }
+        stage('frontend-alb'){
+            steps{
+                script{
+                    build job: '70-frontend-alb',
+                    propagate: false,
+                    wait: false
+                }
+            }
+        }
     }
     post {
         always {

@@ -1,11 +1,11 @@
-pipeline{
+pipeline {
     agent {
-        label 'AGENT_1'
+        label AGENT_1
     }
-    environment{
+    environment {
         appVersion = ''
-        REGION = "us-east-1"
         ACC_ID = "557690617909"
+        REGION = "us-east-1"
         PROJECT = "roboshop"
     }
     options{
@@ -13,62 +13,44 @@ pipeline{
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
-    stages{
+    stages {
         stage('init'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
                         sh """
-                            cd 00-VPC
+                            cd 60-acm
                             terraform init -reconfigure
                         """
-                    }
                 }
             }
         }
         stage('plan'){
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
                         sh """
-                            cd 00-VPC
+                            cd 60-acm
                             terraform plan
                         """
-                    }
                 }
             }
         }
         stage('apply'){
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                submitter "mahi"
-            }
             steps{
                 script{
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                    withAWS(credentials: 'aws-creds', region: 'us-east-1')
                         sh """
-                            cd 00-VPC
+                            cd 60-acm
                             terraform apply -auto-approve
                         """
-                    }
-                }
-            }
-        }
-        // Downstream Job
-        stage('Trigger SG'){
-            steps{
-                script{
-                    build job: '10-sg',
-                    propagate: false,  // even SG fails VPC will not be effected
-                    wait: false // VPC will not wait for SG pipeline completion
                 }
             }
         }
     }
-    post{
+    post {
         always {
-            echo 'I will always say Hello again!'
+             echo 'I will always say Hello again!'
             deleteDir()
         }
         success {

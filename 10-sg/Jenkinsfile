@@ -50,6 +50,7 @@ pipeline {
                 }
             }
         }
+        // Downstream Job and parallely trigerring Bastion,EKS,ACM
         stage('Bastion ACM EKS') {
             parallel {
                 stage('Trigger Bastion'){
@@ -81,6 +82,7 @@ pipeline {
                 }
             }
         }
+        // triggering frontend-alb once above steps are done
         stage('frontend-alb'){
             steps{
                 script{

@@ -46,6 +46,7 @@ resource "aws_lb_target_group" "frontend" {
     name = "${var.project}-${var.environment}-frontend"
     port = 8080 # here for catalogue  port 8080 will be allowed here backend component runs on port 8080
     protocol = "HTTP" # load balancer will hit on this protocol for catalogue to allow
+    target_type = "ip"
     vpc_id = local.vpc_id
     health_check {
         healthy_threshold = 2 #Number of consecutive health check successes required before considering a target healthy. The range is 2-10. Defaults to 3.
